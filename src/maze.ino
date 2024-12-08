@@ -11,8 +11,8 @@ U8G2_SH1107_PIMORONI_128X128_1_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);  
 #define screen_width 128
 #define screen_height 128
 
-#define width 13 # should be odd number
-#define height 11 # should be odd number
+#define width 13 // should be odd number
+#define height 11 // should be odd number
 
 #define block_size 10
 #define menu_height 20
