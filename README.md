@@ -27,7 +27,7 @@ VCC | <--> | VCC
 
 
 
-Joystic | | NO   
+Joystic | | UNO   
 --- | --- | --- 
 VRX | <--> | A1     
 VRY | <--> | A0
