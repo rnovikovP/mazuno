@@ -54,4 +54,7 @@ VCC | <--> | D2
 
 # issues
 ## U8G2
-[https://github.com/olikraus/u8g2/issues/501](https://github.com/olikraus/u8g2/issues/501#issuecomment-366543758)
+- [Screen contrast](https://github.com/olikraus/u8g2/issues/501](https://github.com/olikraus/u8g2/issues/501#issuecomment-366543758}
+
+## UNO R3
+- max 13x11 blocks due memory limit
