@@ -1,5 +1,9 @@
 # mazuno
-Arduino uno maze game
+Arduino uno random maze game
+- random maze generator
+- two kind of bonuces
+- exit when all bonucess are collect
+- limit of steps
 
 # using 
 - U8G2 library for SH1107 I2C display 128X128
@@ -29,13 +33,25 @@ VCC | <--> | VCC
 
 Joystic | | UNO   
 --- | --- | --- 
-VRX | <--> | A1     
 VRY | <--> | A0
-GND | <--> | GND
+VRX | <--> | A1     
 VCC | <--> | VCC
+GND | <--> | GND
 
 
 Buzzer | | UNO  
 --- | --- | --- 
 GND | <--> | GND
 VCC | <--> | D2
+
+
+# Libs
+
+[Maze alghorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Simple_algorithms)
+
+[U8G2](https://github.com/olikraus/u8g2)
+
+
+# issues
+## U8G2
+[https://github.com/olikraus/u8g2/issues/501](https://github.com/olikraus/u8g2/issues/501#issuecomment-366543758)
