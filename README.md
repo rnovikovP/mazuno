@@ -10,14 +10,19 @@ Arduino uno random maze game
 - 2 position xy joystic
 - buzzer
 
+# Game rule
+  - :star: - need to pick up them all to unlock an exit
+  - :hearts: - increate a step count by 3 
+  - [ ] exit - go to start with another random maze
+  - :snowman: (step count) is zero - game over
 
 ![image](https://github.com/user-attachments/assets/04ce9575-4d35-4b29-b32e-e3587c632e11)
 
 
+   Start Game | Exit unlocked
+:-------------------------:|:-------------------------:
+![image](https://github.com/user-attachments/assets/cc7d3fed-8caf-4516-bf1d-1268fd7119c6) | ![image](https://github.com/user-attachments/assets/279201a9-d9a5-447a-9980-0fec78df80e1)
 
-
-
-![image](https://github.com/user-attachments/assets/f047de2f-d14e-4f2b-9969-4a1671edc035)
 
 
 # wires
@@ -57,4 +62,4 @@ VCC | <--> | D2
 - [Screen contrast](https://github.com/olikraus/u8g2/issues/501#issuecomment-366543758)
 
 ## UNO R3
-- max 13x11 blocks due a memory limit
+- max ~13x11~ 15x13 blocks due a memory limit
