@@ -11,12 +11,12 @@ U8G2_SH1107_PIMORONI_128X128_1_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);  
 #define screen_width 128
 #define screen_height 128
 
-#define width 13 // should be odd number
-#define height 11 // should be odd number
+#define width 15 // should be odd number
+#define height 13 // should be odd number
 
-#define block_size 10
-#define menu_height 20
-#define NODE_COUNT width *height
+#define block_size 8
+#define menu_height 14
+#define NODE_COUNT (width * height)
 #define shift_x (screen_width - width * block_size) / 2
 #define shift_y (screen_height - (height)*block_size + block_size / 2)
 
@@ -25,7 +25,7 @@ U8G2_SH1107_PIMORONI_128X128_1_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);  
 
 typedef struct
 {
-  int x, y;      //Node position - less memmory, but faster initialization
+  byte x, y;      //Node position - less memmory, but faster initialization
   void *parent;  //link to the parent
   char c;        //maze symbol, 0-free, 1 - wall, 2-star....
   char dirs;     //possible direction
@@ -33,8 +33,9 @@ typedef struct
 
 Node nodes[NODE_COUNT];  //Array of nodes
 
-char x, y;
-char score[3] = { STEPS_LIMIT, 0, 0 };
+byte x, y;
+byte step_limit = STEPS_LIMIT;
+char score[2] = { 0, 0 };
 
 void beep(int d = 1) {
   digitalWrite(BUZZER_PIN, HIGH);
@@ -43,37 +44,38 @@ void beep(int d = 1) {
 }
 
 void draw() {
-  int i, j;
+  byte i, j;
   Node n;
 
   //  u8g2.setFont(u8g2_font_unifont_t_symbols);
   u8g2.setFont(u8g2_font_8x13_t_symbols);
-  u8g2.drawGlyph(1, menu_height, 0x2603);  /* dec 9731/hex 2603 Snowman */
-  u8g2.drawGlyph(50, menu_height, 0x2605); /* dec 9731/hex 2603 Snowman */
-  u8g2.drawGlyph(90, menu_height, 0x2661); /* dec 9731/hex 2603 Snowman */
+  u8g2.drawGlyph(8, menu_height, 0x2603);  /* dec 9731/hex 2603 Snowman */
+  u8g2.drawGlyph(54, menu_height, 0x2605); /* dec 9731/hex 2603 Snowman */
+  u8g2.drawGlyph(94, menu_height, 0x2661); /* dec 9731/hex 2603 Snowman */
 
-  u8g2.setCursor(12, menu_height);
+  u8g2.setCursor(20, menu_height);
+  u8g2.print(step_limit > 0 ? step_limit : 0);
+  u8g2.setCursor(64, menu_height);
   u8g2.print(score[0] > 0 ? score[0] : 0);
-  u8g2.setCursor(60, menu_height);
+  u8g2.setCursor(104, menu_height);
   u8g2.print(score[1] > 0 ? score[1] : 0);
-  u8g2.setCursor(100, menu_height);
-  u8g2.print(score[2] > 0 ? score[2] : 0);
 
   // draw walls
   // u8g2.drawBox(0, menu_height, (width+2)*block_size, block_size);
   // u8g2.drawBox(0, (height+1)*block_size + menu_height, (width+2)*block_size, block_size);
   // u8g2.drawBox(0, menu_height + 2*block_size, block_size, height*block_size);
   // u8g2.drawBox((width+1)*block_size,  block_size + menu_height, block_size, (height - 1) * block_size);
-  u8g2.setFont(u8g2_font_8x13_t_symbols);
+  u8g2.setFont(u8g2_font_6x12_t_symbols);
 
   for (i = 0; i < width; i++) {
     for (j = 0; j < height; j++) {
       n = nodes[i + j * width];
       switch (n.c) {
         case 1:
-          if (j == 0)
-            u8g2.drawBox(n.x * block_size + shift_x, shift_y + n.y * block_size + block_size / 2, block_size, block_size / 2);
-          else
+          // if (j == 0)
+          //  write half block
+          //  u8g2.drawBox(n.x * block_size + shift_x, shift_y + n.y * block_size + block_size / 2, block_size, block_size / 2);
+          //else
             u8g2.drawBox(n.x * block_size + shift_x, shift_y + n.y * block_size, block_size, block_size);
           break;
         case 2:
@@ -115,9 +117,9 @@ void gameOver() {
     u8g2.setFontPosCenter();
     u8g2.setFont(u8g2_font_ncenB14_tr);
     u8g2.setCursor(30, 30);
-    u8g2.print("Game");
+    u8g2.print(F("Game"));
     u8g2.setCursor(34, 60);
-    u8g2.print("Over!");
+    u8g2.print(F("Over!"));
   } while (u8g2.nextPage());
 
   digitalWrite(BUZZER_PIN, HIGH);
@@ -144,7 +146,7 @@ void openExit() {
   
   Node *n;
   // get wall nuber
-  int i = random(1, height);
+  byte i = random(1, height);
   // if even
   if (i % 2) {
     // x = width-1, y = i
@@ -160,15 +162,15 @@ void openExit() {
     n->c = 0;
     n->dirs = 8;  // Allow Right
   }
-  beep(12);
+  beep(18);
 }
 
 void loop() {
-  if (score[0] <= 0)
+  if (step_limit <= 0)
     gameOver();
 
-  if (score[1] + score[2] == 0) {
-    score[1] = score[2] = -1;  // the exist is awaliable
+  if (score[0] == 0) {
+    score[0] = -1;  // the exist is awaliable
     openExit();
   }
 
@@ -183,35 +185,39 @@ void loop() {
 
   if (xVal < 150 && x < width - 1 && nodes[x + 1 + y * width].c != 1) {  // Right
     x++;
-    beep();
-    score[0]--;
+    beep(2);
+    step_limit--;
   } else if (xVal > 850 && x > 0 && nodes[x - 1 + y * width].c != 1) {  // Left
     x--;
-    beep();
-    score[0]--;
+    beep(1);
+    step_limit--;
   } else if (yVal > 850 && y < height - 1 && nodes[x + (y + 1) * width].c != 1) {  // Down
     y++;
-    beep();
-    score[0]--;
+    beep(2);
+    step_limit--;
   } else if (yVal < 150 && y > 0 && nodes[x + (y - 1) * width].c != 1) {  // UP
     y--;
-    beep();
-    score[0]--;
+    beep(1);
+    step_limit--;
   }
 
   Node *n;
   n = nodes + x + y * width;
+  // when pic the star
   if (n->c == 2) {
-    score[1]--;
+    score[0]--;
     beep(4);
     beep(6);
     n->c = 0;
+    // when poc the heart
   } else if (n->c == 3) {
-    score[2]--;
+    score[1]--;
     beep(6);
     beep(4);
-    beep();
+    beep(5);
     n->c = 0;
+    // increase steps
+    step_limit += 4;
   }
 
 
@@ -235,13 +241,13 @@ void startGame() {
     ;
   x = 0;
   y = 1;
-  score[0] = STEPS_LIMIT;
+  step_limit = STEPS_LIMIT;
 }
 
 Node *link(Node *n) {
   //Connect node to a random neigbour
   // and return next node
-  int x, y;
+  byte x, y;
   char dir;
   Node *dest;
 
@@ -318,8 +324,8 @@ void grid_init() {
   Node *n;
 
   // reset score
+  score[0] = 0;
   score[1] = 0;
-  score[2] = 0;
 
   for (i = 0; i < width; i++) {
     for (j = 0; j < height; j++) {
@@ -328,7 +334,7 @@ void grid_init() {
       if (i * j % 2) {
         n->c = (random(1, 4) + 1) % 4;
         if (n->c > 0)
-          score[n->c - 1]++;
+          score[n->c - 2]++;
 
         n->dirs = 15;
         // start point
