@@ -2,19 +2,17 @@
 Arduino uno random maze game
 - random maze generator
 - two kind of bonuces
-- exit when all bonucess are collect
-- limit of steps
+  - :star: - need to pick up them all to unlock an exit
+  - :hearts: - increate a step count by 3 
+- [ ] exit when all :star: are collect
+- :snowman: (step count) - limit of steps
 
 # using 
 - U8G2 library for SH1107 I2C display 128X128
 - 2 position xy joystic
 - buzzer
 
-# Game rule
-  - :star: - need to pick up them all to unlock an exit
-  - :hearts: - increate a step count by 3 
-  - [ ] exit - go to start with another random maze
-  - :snowman: (step count) is zero - game over
+  
 
 ![image](https://github.com/user-attachments/assets/04ce9575-4d35-4b29-b32e-e3587c632e11)
 
