@@ -48,6 +48,13 @@ GND | <--> | GND
 VCC | <--> | D2
 
 
+
+
+[WOKWI project](https://wokwi.com/projects/422621312997012481)
+
+![image](https://github.com/user-attachments/assets/abe99a57-3721-4b30-a1d8-b5887e2bc1e0)
+
+
 # Libs
 
 [Maze alghorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Simple_algorithms)
