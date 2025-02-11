@@ -18,7 +18,7 @@ U8G2_SH1107_PIMORONI_128X128_1_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);  
 #define menu_height 14
 #define NODE_COUNT (width * height)
 #define shift_x (screen_width - width * block_size) / 2
-#define shift_y (screen_height - (height)*block_size + block_size / 2)
+#define shift_y (screen_height - height * block_size)
 
 #define STEPS_LIMIT 100
 
